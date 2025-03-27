@@ -6,4 +6,4 @@ Supported AWS Services:
 * IoT Core
 * SQSQueue
 
-This uses the official AWS https://github.com/aws/aws-sdk-go-v2? repo.
+This uses the official AWS https://github.com/aws/aws-sdk-go-v2 repo.
