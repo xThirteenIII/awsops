@@ -3,20 +3,35 @@ package awsops
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
-// AWSOps provides AWS configurations along with AWS services clients.
-type AWSOps struct {
-    cfg             Config //Not a pointer, we don't want it to be modified.
-    DynamoDBClient  *dynamodb.Client
+var generalConfig Config
+
+func init() {
+    var err error
+    generalConfig, err = initConfig(context.TODO())
+    if err != nil {
+        log.Fatalf("\nerror loading aws configurations.")
+    }
 }
 
+// AWSOps provides AWS services.
+type AWSOps struct {
+    DynamoDB  *DynamoService
+}
+
+
+// Config provides general configs.
 type Config struct {
-    AWSConfig  aws.Config
+    awsConfig  aws.Config
+}
+
+func GetSDKConfig() aws.Config {
+    return generalConfig.awsConfig
 }
 
 // NewAWSOps returns a new AWSOps pointer.
@@ -25,12 +40,7 @@ type Config struct {
 // Returns the error encountered by initConfig.
 func NewAWSOps() (*AWSOps, error) {
 
-    conf, err := initConfig(context.TODO())
-    if err != nil {
-        return &AWSOps{}, nil
-    }
-    
-    return &AWSOps{cfg: conf}, nil
+    return &AWSOps{}, nil
 }
 
 // Copy returns a shallow copy of the AWSOps object.
@@ -52,5 +62,5 @@ func initConfig(ctx context.Context) (Config, error) {
     }
     fmt.Printf("Done\n")
 
-    return Config{AWSConfig: cfg}, nil
+    return Config{awsConfig: cfg}, nil
 }

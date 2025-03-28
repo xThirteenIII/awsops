@@ -1,6 +1,7 @@
 package awsops
 
 import (
+	"context"
 	"log"
 
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
@@ -8,9 +9,27 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
+// DynamoService implements the awsService interface.
+type DynamoService struct{
+    client *dynamodb.Client 
+}
+
+// initClient initializes the DynamoDB service client.
+//
+// Should this return an error if cfg is empty?
+func (d *DynamoService) initClient(){
+    d.client = dynamodb.NewFromConfig(GetSDKConfig())
+}
+
+// getServiceName returns the DynamoDB service name.
+func (d *DynamoService) getServiceName() string{
+
+    return "DynamoDB"
+}
+
 // InitDynamoDBClient creates a new DynamoDBClient
 func (a *AWSOps) InitDynamoDBClient() {
-   a.DynamoDBClient = dynamodb.NewFromConfig(a.cfg.AWSConfig)
+   initServiceClient(a.DynamoDB)
 }
 
 // GetMarshaledKey returns a key ready to be used for dynamoDB operations. 
@@ -27,3 +46,6 @@ func GetMarshaledKey(keyValue, keyName string) map[string]types.AttributeValue {
     return map[string]types.AttributeValue{keyName: marshaledKey}
 }
 
+func (a *AWSOps) deleteFromTable(ctx context.Context){
+
+}
