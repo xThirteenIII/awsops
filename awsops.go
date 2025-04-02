@@ -40,7 +40,7 @@ func GetSDKConfig() aws.Config {
 // Returns the error encountered by initConfig.
 func NewAWSOps() (*AWSOps, error) {
 
-    return &AWSOps{}, nil
+    return &AWSOps{DynamoDB: &DynamoService{}}, nil
 }
 
 // Copy returns a shallow copy of the AWSOps object.
@@ -55,7 +55,7 @@ func (a AWSOps) Copy() AWSOps {
 // Optional configs are not supported yet.
 func initConfig(ctx context.Context) (Config, error) {
 
-    fmt.Printf("\nLoading AWS configurations... ")
+    fmt.Printf("\nLoading AWS configurations...")
     cfg, err := config.LoadDefaultConfig(ctx)
     if err != nil {
         return Config{}, fmt.Errorf("failed loading aws configurations. Here's why: %v", err)

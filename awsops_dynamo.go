@@ -2,6 +2,7 @@ package awsops
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
@@ -18,7 +19,12 @@ type DynamoService struct{
 //
 // Should this return an error if cfg is empty?
 func (d *DynamoService) initClient(){
-    d.client = dynamodb.NewFromConfig(GetSDKConfig())
+    if d == nil {
+        fmt.Errorf("DynamoService is nil at this point")
+        return
+    }
+    cfg := GetSDKConfig()
+    d.client = dynamodb.NewFromConfig(cfg)
 }
 
 // getServiceName returns the DynamoDB service name.
